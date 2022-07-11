@@ -5,6 +5,7 @@ use serde;
 use tokio;
 
 mod output;
+mod http;
 
 struct Settings {
     boost: bool,
@@ -61,34 +62,15 @@ fn generate_code(config: Settings) -> String {
         final_string.push_str(&CHARSET[number - 1..number]);
     }
 
-    println!("{}", final_string);
+
     return final_string;
-}
-
-#[derive(serde::Deserialize)]
-struct CodeResponse {
-    message: String
-}
-
-// Unknown Gift Code
-// The resource is being rate limited.
-async fn check_code(code: &String) -> String {
-    let base_url: String = String::from("https://discordapp.com/api/v6/entitlements/gift-codes/");
-    let url: String = base_url + &code;
-
-    let response: Response = get(url).await.unwrap();
-    
-    let data: CodeResponse = response.json::<CodeResponse>()
-    .await.unwrap();
-
-    return data.message;
 }
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     let config: Settings = input();
     let code: String = generate_code(config);
-    let response: String = check_code(&code).await;
+    let response: String = http::make_request(&code, &String::from("fdf")).await;
 
     if response == "Unknown Gift Code" {
         output::print_success(code);
