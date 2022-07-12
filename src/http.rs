@@ -8,23 +8,34 @@ pub struct CodeResponse {
 
 pub struct Proxy {
     pub host: String,
-    pub port: u32
+    pub port: String,
 }
 
-pub async fn make_request(code: &String, _proxy: &String) -> String {
+pub async fn make_request(code: &String, proxy: String) -> String {
     let base_url: String = String::from("https://discordapp.com/api/v6/entitlements/gift-codes/");
     let url: String = base_url + &code;
 
-    let response: Response = get(url).await.unwrap();
-    
+    let http_proxy = reqwest::Proxy::http(proxy)
+    .expect("Failed to construct a proxy");
+
+    let client = reqwest::Client::builder()
+        .proxy(http_proxy)
+        .build()
+        .expect("Failed to build http client");
+
+    let response: Response = client.get(url)
+        .send()
+        .await
+        .expect("Failed to send the request");
+
     let data: CodeResponse = response.json::<CodeResponse>()
         .await
-        .unwrap();
+        .expect("Failed to parse data as a json and deserialize into struct");
 
     return String::from(data.message);
 }
 
-pub async fn fetch_proxies() -> Vec<Proxy> {
+pub async fn fetch_proxies() -> Option<Vec<Proxy>> {
     let mut proxies: Vec<Proxy> = Vec::new();
     let base_url: String = String::from("https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all");
 
@@ -37,16 +48,18 @@ pub async fn fetch_proxies() -> Vec<Proxy> {
         .to_string();
 
     for item in response.split("\n") {
-        let proxyVec: Vec<&str> = item.split(":").collect::<Vec<&str>>();
-        let mut newProx: Proxy = Proxy { host: String::from(""), port: 1 };
+        if item.len() == 0 {
+            continue;
+        };
 
-        newProx.host = proxyVec[0].to_string();
-        newProx.port = proxyVec[1].to_string()
-            .parse::<u32>()
-            .unwrap();
-        
-        proxies.push(newProx);
-    }
+        let proxy_vec: Vec<&str> = item.split(":").collect::<Vec<&str>>();
+        let new_proxy: Proxy = Proxy { 
+            host: String::from(proxy_vec[1]), 
+            port: String::from(proxy_vec[0]) 
+        };
 
-    return proxies;
+        proxies.push(new_proxy);
+    };
+
+    return Some(proxies);
 }
