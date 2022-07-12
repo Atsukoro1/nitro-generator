@@ -19,5 +19,7 @@ async fn main() -> std::io::Result<()> {
         output::print_success(&code);
     }
 
+    http::fetch_proxies().await;
+
     Ok(())
 }
