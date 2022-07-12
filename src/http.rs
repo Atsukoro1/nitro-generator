@@ -2,8 +2,8 @@ use reqwest::{Response, get};
 use serde;
 
 #[derive(serde::Deserialize)]
-struct CodeResponse {
-    message: String
+pub struct CodeResponse {
+    pub message: String
 }
 
 pub async fn make_request(code: &String, _proxy: &String) -> String {

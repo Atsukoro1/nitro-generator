@@ -10,7 +10,7 @@ fn local_time() -> ColoredString {
     .bright_black()
 }
 
-pub fn print_success(code: String) {
+pub fn print_success(code: &String) {
     println!(
         "[{}] Code {} is valid, feel free to use it!", 
         local_time(),
@@ -18,18 +18,18 @@ pub fn print_success(code: String) {
     );
 }
 
-// pub fn print_ratelimit(code: String) {
-//     println!(
-//         "[{}] Code {} wasn't checked because of ratelimit, switching proxy!",
-//         local_time(),
-//         code.blue()
-//     );
-// }
+pub fn print_ratelimit(code: &String) {
+    println!(
+        "[{}] Code {} wasn't checked because of ratelimit, switching proxy!",
+        local_time(),
+        code.blue()
+    );
+}
 
-// pub fn print_error(code: String) {
-//     println!(
-//         "[{}] Code {} is not valid!", 
-//         local_time(),
-//         code.red()
-//     );
-// }
+pub fn print_error(code: &String) {
+    println!(
+        "[{}] Code {} is not valid!", 
+        local_time(),
+        code.red()
+    );
+}
