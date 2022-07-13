@@ -6,6 +6,7 @@ pub struct CodeResponse {
     pub message: String
 }
 
+#[allow(dead_code)]
 pub struct Proxy {
     pub host: String,
     pub port: String,
@@ -33,7 +34,7 @@ pub async fn make_request(code: &String, proxy: String) -> String {
         .await
         .expect("Failed to parse data as a json and deserialize into struct");
 
-    return String::from(data.message);
+    return data.message;
 }
 
 pub async fn fetch_proxies() -> Option<Vec<Proxy>> {
@@ -55,8 +56,8 @@ pub async fn fetch_proxies() -> Option<Vec<Proxy>> {
 
         let proxy_vec: Vec<&str> = item.split(":").collect::<Vec<&str>>();
         let new_proxy: Proxy = Proxy { 
-            host: String::from(proxy_vec[1]), 
-            port: String::from(proxy_vec[0]) 
+            host: String::from(proxy_vec[0]), 
+            port: String::from(proxy_vec[1]) 
         };
 
         proxies.push(new_proxy);
