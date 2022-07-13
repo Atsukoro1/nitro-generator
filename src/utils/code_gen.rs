@@ -1,5 +1,5 @@
 use rand::{Rng};
-use crate::input::{Settings};
+use crate::settings::{Settings};
 
 pub fn generate_code(config: Settings) -> String {
     const CHARSET: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

@@ -1,13 +1,15 @@
 use tokio;
 
 mod output;
-mod input;
+mod settings;
 mod http;
 mod utils;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    let config: input::Settings = input::conf_settings();
+    output::print_menu();
+    
+    let config: settings::Settings = settings::conf_settings();
     let code: String = utils::code_gen::generate_code(config);
     let response: String = http::make_request(&code, String::from("127.0.0.1")).await;
 

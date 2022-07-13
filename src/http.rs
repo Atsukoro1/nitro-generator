@@ -19,6 +19,7 @@ pub async fn make_request(code: &String, proxy: String) -> String {
     .expect("Failed to construct a proxy");
 
     let client = reqwest::Client::builder()
+        .user_agent("Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0")
         .proxy(http_proxy)
         .build()
         .expect("Failed to build http client");
