@@ -4,10 +4,11 @@ mod output;
 mod settings;
 mod http;
 mod utils;
+mod proxy;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    let mut proxies: Vec<http::Proxy> = vec![];
+    let mut proxies: Vec<proxy::Proxy> = vec![];
     let mut generated: Option<u128> = Some(1);
 
     output::print_menu();
@@ -16,7 +17,7 @@ async fn main() -> std::io::Result<()> {
     while config.code_count >= generated.unwrap() { 
         // Fetch proxies when proxy list is empty
         if proxies.len() == 0 {
-            proxies = http::fetch_proxies()
+            proxies = proxy::fetch_proxies(proxy::ProxySource::Proxyscrape)
                 .await
                 .expect("Failed to fetch proxies");
         };
@@ -25,7 +26,7 @@ async fn main() -> std::io::Result<()> {
         let code: String = utils::code_gen::generate_code(&config);
 
         // Check the code
-        let proxy: &http::Proxy = proxies.first().unwrap();
+        let proxy: &proxy::Proxy = proxies.first().unwrap();
 
         println!("{}", proxy.host);
         println!("{}", proxy.port);
