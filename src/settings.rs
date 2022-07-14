@@ -40,14 +40,14 @@ pub fn conf_settings() -> Settings {
     ).bright_blue();
 
     while icode_type.len() == 0 && (icode_type != "boost" || icode_type != "classic") {
-        println!("{} / {}", get_message_type(MessageType::Info), code_gen_string);
+        println!("\n{} / {}", get_message_type(MessageType::Info), code_gen_string);
         io::stdin()
             .read_line(&mut icode_type)
             .expect("Failed to read this line!");  
     };
 
     while config.proxy_souce == None {
-        println!("{}", proxy_source_string);
+        println!("\n{}", proxy_source_string);
         let mut temp: String = String::new();
 
         io::stdin()
@@ -60,14 +60,14 @@ pub fn conf_settings() -> Settings {
     };
 
     while ithread_count.len() == 0 {
-        println!("{} / {}", get_message_type(MessageType::Info), thread_count_string);
+        println!("\n{} / {}", get_message_type(MessageType::Info), thread_count_string);
         io::stdin()
             .read_line(&mut ithread_count)
             .expect("Failed to read this line!");
     };
 
     while icode_count == "" {
-        println!("{} / {}", get_message_type(MessageType::Info), code_count_string);
+        println!("\n{} / {}", get_message_type(MessageType::Info), code_count_string);
         io::stdin()
             .read_line(&mut icode_count)
             .expect("Cannot read this line!");

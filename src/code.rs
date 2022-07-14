@@ -24,7 +24,7 @@ pub struct CodeResponse {
     pub message: String
 }
 
-pub async fn check_code(code: &String, proxy: String) -> reqwest::StatusCode {
+pub async fn check_code(code: &String, proxy: &String) -> reqwest::StatusCode {
     let base_url: String = String::from("https://discordapp.com/api/v6/entitlements/gift-codes/");
     let url: String = base_url + &code;
 

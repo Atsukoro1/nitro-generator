@@ -36,7 +36,7 @@ async fn main() -> std::io::Result<()> {
         println!("{}", proxy.port);
 
         let proxy_string: String = format!("{}:{}", proxy.host, proxy.port);
-        let response: reqwest::StatusCode = code::check_code(&code, proxy_string).await;
+        let response: reqwest::StatusCode = code::check_code(&code, &proxy_string).await;
 
         match response {
             reqwest::StatusCode::OK => {
