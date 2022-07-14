@@ -2,9 +2,8 @@ use tokio;
 
 mod output;
 mod settings;
-mod http;
-mod utils;
 mod proxy;
+mod code;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -28,7 +27,7 @@ async fn main() -> std::io::Result<()> {
         };
 
         // Generate code
-        let code: String = utils::code_gen::generate_code(&config);
+        let code: String = code::generate_code(&config);
 
         // Check the code
         let proxy: &proxy::Proxy = proxies.first().unwrap();
@@ -37,7 +36,7 @@ async fn main() -> std::io::Result<()> {
         println!("{}", proxy.port);
 
         let proxy_string: String = format!("{}:{}", proxy.host, proxy.port);
-        let response: reqwest::StatusCode = http::make_request(&code, proxy_string).await;
+        let response: reqwest::StatusCode = code::check_code(&code, proxy_string).await;
 
         match response {
             reqwest::StatusCode::OK => {

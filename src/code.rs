@@ -1,13 +1,36 @@
-use reqwest::{Response, Error, get};
-use serde;
+use crate::settings::{Settings};
+use rand::{Rng};
+use serde::Deserialize;
+use reqwest::{Response, Error};
 use std::time::Duration;
 
-#[derive(serde::Deserialize)]
+
+pub fn generate_code(config: &Settings) -> String {
+    const CHARSET: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    let mut final_string: String = String::from("");
+    let code_length: u8;
+    
+    match config.boost {
+        true => code_length = 24,
+        false => code_length = 16,
+    };
+
+    let mut rng = rand::thread_rng();
+
+    for _x in 0..code_length {
+        let number: usize = rng.gen_range(1, CHARSET.len() as usize);
+        final_string.push_str(&CHARSET[number - 1..number]);
+    };
+
+    return final_string;
+}
+
+#[derive(Deserialize)]
 pub struct CodeResponse {
     pub message: String
 }
 
-pub async fn make_request(code: &String, proxy: String) -> reqwest::StatusCode {
+pub async fn check_code(code: &String, proxy: String) -> reqwest::StatusCode {
     let base_url: String = String::from("https://discordapp.com/api/v6/entitlements/gift-codes/");
     let url: String = base_url + &code;
 
