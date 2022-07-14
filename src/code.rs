@@ -7,12 +7,9 @@ use std::time::Duration;
 
 
 pub fn generate_code(config: &Settings) -> String {
-    let mut final_string: String = String::from("");
-    let code_length: usize;
-    
-    match config.boost {
-        true => code_length = 24 as usize,
-        false => code_length = 16 as usize,
+    let code_length: usize = match config.boost {
+        true => 24 as usize,
+        false => 16 as usize,
     };
     
     return rand::thread_rng()
