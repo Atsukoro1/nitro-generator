@@ -7,10 +7,10 @@ use std::vec;
 use crate::output::{MessageType, get_message_type};
 use std::thread::sleep;
 use std::time::Duration;
+use serde::Deserialize;
 
 pub enum ProxySource {
     Proxyscrape,
-    ApiProxyFree,
     Geonode,
     Local
 }
@@ -18,6 +18,17 @@ pub enum ProxySource {
 pub struct Proxy {
     pub host: String,
     pub port: String,
+}
+
+#[derive(Deserialize)]
+struct geonodeResponseField {
+    ip: String,
+    port: String
+}
+
+#[derive(Deserialize)]
+struct geonodeResponse {
+    data: Vec<geonodeResponseField>,
 }
 
 pub async fn fetch_proxies(source: ProxySource) -> Option<Vec<Proxy>> {
@@ -32,10 +43,34 @@ pub async fn fetch_proxies(source: ProxySource) -> Option<Vec<Proxy>> {
             return Some(fetch_local().await);
         },
 
-        _ => {
-            return None;
+        ProxySource::Geonode => {
+            return Some(fetch_geonode().await);
         }
     };
+}
+
+
+async fn fetch_geonode() -> Vec<Proxy> {
+    let mut proxies: Vec<Proxy> = vec![];
+    let base_url: String = String::from("https://proxylist.geonode.com/api/proxy-list?limit=2&page=100&sort_by=speed&sort_type=desc");
+
+    let response: geonodeResponse = get(base_url)
+        .await
+        .expect("Failed to return response")
+        .json::<geonodeResponse>()
+        .await
+        .expect("Failed parsing response as a JSON");   
+
+    for item in response.data {
+        proxies.push(
+            Proxy {
+                host: item.ip,
+                port: item.port
+            }
+        );
+    };
+    
+    return proxies;
 }
 
 async fn fetch_proxyscrape() -> Vec<Proxy> {
@@ -56,12 +91,11 @@ async fn fetch_proxyscrape() -> Vec<Proxy> {
         };
 
         let proxy_vec: Vec<&str> = item.split(":").collect::<Vec<&str>>();
-        let new_proxy: Proxy = Proxy { 
+
+        proxies.push(Proxy { 
             host: String::from(proxy_vec[0]), 
             port: String::from(proxy_vec[1]) 
-        };
-
-        proxies.push(new_proxy);
+        });
     };
 
     return proxies;
