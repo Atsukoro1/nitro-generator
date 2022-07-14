@@ -9,23 +9,29 @@ use crate::output::{
 
 pub struct Settings {
     pub boost: bool,
-    pub code_count: u128
+    pub code_count: u128,
+    pub thread_count: u16,
 }
 
 pub fn conf_settings() -> Settings {
     let mut config: Settings = Settings{
         boost: false,
-        code_count: 0
+        code_count: 0,
+        thread_count: 0,
     };
 
     let mut icode_type: String = String::new();
     let mut icode_count: String = String::new();
+    let mut ithread_count: String = String::new();
 
     let code_gen_string: ColoredString = String::from(
         "What type of code to generate [boost/classic]: "
     ).bright_blue();
     let code_count_string: ColoredString = String::from(
         "How many codes do you want to generate [number]: "
+    ).bright_blue();
+    let thread_count_string: ColoredString = String::from(
+        "How many threads do you want to use [number]"
     ).bright_blue();
 
     while icode_type.len() == 0 && (icode_type != "boost" || icode_type != "classic") {
@@ -34,6 +40,13 @@ pub fn conf_settings() -> Settings {
             .read_line(&mut icode_type)
             .expect("Failed to read this line!");  
     };
+
+    while ithread_count.len() == 0 {
+        println!("{} / {}", get_message_type(MessageType::Info), thread_count_string);
+        io::stdin()
+            .read_line(&mut ithread_count)
+            .expect("Failed to read this line!");
+    }
 
     while icode_count == "" {
         println!("{} / {}", get_message_type(MessageType::Info), code_count_string);

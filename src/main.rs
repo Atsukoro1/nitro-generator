@@ -38,20 +38,18 @@ async fn main() -> std::io::Result<()> {
                 output::print_success(&code);
             },
 
-            reqwest::StatusCode::BAD_REQUEST => {
-                output::print_error(&code);
-            },
-
             reqwest::StatusCode::NOT_FOUND => {
                 output::print_error(&code);
             }
 
             reqwest::StatusCode::TOO_MANY_REQUESTS => {
                 output::print_ratelimit(&code);
+                proxies.drain(0..1);
             }
 
             _ => {
                 output::print_invalid_proxy(&code);
+                proxies.drain(0..1);
             }
         }
 
