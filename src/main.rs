@@ -17,7 +17,12 @@ async fn main() -> std::io::Result<()> {
     while config.code_count >= generated.unwrap() { 
         // Fetch proxies when proxy list is empty
         if proxies.len() == 0 {
-            proxies = proxy::fetch_proxies(proxy::ProxySource::Geonode)
+            proxies = proxy::fetch_proxies(match config.proxy_souce {
+                Some(1) => proxy::ProxySource::Proxyscrape,
+                Some(2) => proxy::ProxySource::Local,
+                Some(3) => proxy::ProxySource::Geonode,
+                _ => proxy::ProxySource::Proxyscrape,
+            })
                 .await
                 .expect("Failed to fetch proxies");
         };
