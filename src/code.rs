@@ -1,28 +1,25 @@
 use crate::settings::{Settings};
 use rand::{Rng};
+use rand::distributions::Alphanumeric;
 use serde::Deserialize;
 use reqwest::{Response, Error};
 use std::time::Duration;
 
 
 pub fn generate_code(config: &Settings) -> String {
-    const CHARSET: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     let mut final_string: String = String::from("");
-    let code_length: u8;
+    let code_length: usize;
     
     match config.boost {
-        true => code_length = 24,
-        false => code_length = 16,
+        true => code_length = 24 as usize,
+        false => code_length = 16 as usize,
     };
-
-    let mut rng = rand::thread_rng();
-
-    for _x in 0..code_length {
-        let number: usize = rng.gen_range(1, CHARSET.len() as usize);
-        final_string.push_str(&CHARSET[number - 1..number]);
-    };
-
-    return final_string;
+    
+    return rand::thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(code_length)
+        .map(char::from)
+        .collect();
 }
 
 #[derive(Deserialize)]
