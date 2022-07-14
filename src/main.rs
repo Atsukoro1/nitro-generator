@@ -30,20 +30,30 @@ async fn main() -> std::io::Result<()> {
         println!("{}", proxy.host);
         println!("{}", proxy.port);
 
-        let proxy_string: String = format!("http://{}:{}", proxy.host, proxy.port);
-        let response: String = http::make_request(&code, proxy_string).await;
+        let proxy_string: String = format!("{}:{}", proxy.host, proxy.port);
+        let response: reqwest::StatusCode = http::make_request(&code, proxy_string).await;
 
-        let unknown: String = String::from("Unknown Gift Code");
-        let ratelimit: String = String::from("The resource is being rate limited.");
-    
-        if response.eq("Unknown Gift Code") {
-            output::print_error(&code);
-        } else if response.eq("The resource is being rate limited.") {
-            output::print_ratelimit(&code);
-            proxies.drain(0..1);
-        } else {
-            output::print_success(&code);
-        };
+        match response {
+            reqwest::StatusCode::OK => {
+                output::print_success(&code);
+            },
+
+            reqwest::StatusCode::BAD_REQUEST => {
+                output::print_error(&code);
+            },
+
+            reqwest::StatusCode::NOT_FOUND => {
+                output::print_error(&code);
+            }
+
+            reqwest::StatusCode::TOO_MANY_REQUESTS => {
+                output::print_ratelimit(&code);
+            }
+
+            _ => {
+                output::print_invalid_proxy(&code);
+            }
+        }
 
         generated = Some(generated.unwrap() + 1);
     };

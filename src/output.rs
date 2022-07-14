@@ -71,3 +71,12 @@ pub fn print_error(code: &String) {
         code.red()
     );
 }
+
+pub fn print_invalid_proxy(code: &String) {
+    println!(
+        "{} / {} Code {} cannot be verified, proxy is not working, switching!", 
+        get_message_type(MessageType::Warning),
+        local_time(),
+        code.yellow()
+    );
+}
