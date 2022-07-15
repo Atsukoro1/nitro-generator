@@ -31,7 +31,7 @@ struct geonodeResponse {
     data: Vec<geonodeResponseField>,
 }
 
-pub async fn fetch_proxies(source: ProxySource) -> Option<Vec<Proxy>> {
+pub async fn fetch_proxies(source: &ProxySource) -> Option<Vec<Proxy>> {
     let mut proxies: Vec<Proxy> = Vec::new();
     
     match source {
