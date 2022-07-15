@@ -1,11 +1,8 @@
 extern crate colored;
 
 use std::{
-    io::{self, Write, IoSlice, Read}, 
-    i8, 
     str::FromStr
 };
-use colored::*;
 use crate::{output::{
     get_message_type,
     MessageType

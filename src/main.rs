@@ -27,9 +27,6 @@ async fn main() -> std::io::Result<()> {
         // Check the code
         let proxy: &proxy::Proxy = proxies.first().unwrap();
 
-        println!("{}", proxy.host);
-        println!("{}", proxy.port);
-
         let proxy_string: String = format!("{}:{}", proxy.host, proxy.port);
         let response: reqwest::StatusCode = code::check_code(&code, &proxy_string).await;
 

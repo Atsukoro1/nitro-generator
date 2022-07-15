@@ -1,8 +1,8 @@
-use reqwest::{get, Response};
+use reqwest::{get};
 use core::panic;
 use std::fs::File;
 use std::io::prelude::*;
-use std::path::{Path, Display};
+use std::path::{Path};
 use std::vec;
 use crate::output::{MessageType, get_message_type};
 use std::thread::sleep;
@@ -21,19 +21,17 @@ pub struct Proxy {
 }
 
 #[derive(Deserialize)]
-struct geonodeResponseField {
+struct GeonodeResponseField {
     ip: String,
     port: String
 }
 
 #[derive(Deserialize)]
-struct geonodeResponse {
-    data: Vec<geonodeResponseField>,
+struct GeonodeResponse {
+    data: Vec<GeonodeResponseField>,
 }
 
 pub async fn fetch_proxies(source: &ProxySource) -> Option<Vec<Proxy>> {
-    let mut proxies: Vec<Proxy> = Vec::new();
-    
     match source {
         ProxySource::Proxyscrape => {
             return Some(fetch_proxyscrape().await);
@@ -54,10 +52,10 @@ async fn fetch_geonode() -> Vec<Proxy> {
     let mut proxies: Vec<Proxy> = vec![];
     let base_url: String = String::from("https://proxylist.geonode.com/api/proxy-list?limit=2&page=100&sort_by=speed&sort_type=desc");
 
-    let response: geonodeResponse = get(base_url)
+    let response: GeonodeResponse = get(base_url)
         .await
         .expect("Failed to return response")
-        .json::<geonodeResponse>()
+        .json::<GeonodeResponse>()
         .await
         .expect("Failed parsing response as a JSON");   
 
@@ -104,11 +102,9 @@ async fn fetch_proxyscrape() -> Vec<Proxy> {
 async fn fetch_local() -> Vec<Proxy> {
     let mut proxies: Vec<Proxy> = vec![];
     let path: &Path = Path::new("proxies.txt");
-    let display: Display = path.display();
 
     let mut file = match File::open(&path) {
-        Err(w) => {
-            panic!("{}", w);
+        Err(..) => {
             println!(
                 "{} / Failed to get proxy.txt file, please create one!", 
                 get_message_type(MessageType::Failure)

@@ -41,8 +41,8 @@ pub async fn check_code(code: &String, proxy: &String) -> reqwest::StatusCode {
     let response: Result<Response, Error> = client.get(url)
         .send()
         .await;
-
-    let to_return: i32 = match response {
+    
+    match response {
         Ok(..) => {
             return response.unwrap().status();
         },
