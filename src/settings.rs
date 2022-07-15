@@ -40,7 +40,7 @@ pub fn conf_settings() -> Settings {
     };
 
     config.boost = input(
-        "Generate boost codes [true/false]: ", 
+        "What type of code do you want to generate [boost = true/clasic = false]: ", 
         false,
     );
 
