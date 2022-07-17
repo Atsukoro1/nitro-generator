@@ -4,9 +4,11 @@ mod output;
 mod settings;
 mod proxy;
 mod code;
+mod menu;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
+    menu::draw_menu().await;
     let mut proxies: Vec<proxy::Proxy> = vec![];
     let mut generated: Option<u128> = Some(1);
 
