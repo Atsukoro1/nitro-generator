@@ -1,4 +1,4 @@
-use crate::settings::{Settings};
+use crate::menu::{Settings};
 use rand::{Rng};
 use rand::distributions::Alphanumeric;
 use serde::Deserialize;

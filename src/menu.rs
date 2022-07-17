@@ -1,3 +1,4 @@
+use colored::{Colorize, ColoredString};
 use dialoguer::{
     theme,
     Select,
@@ -14,6 +15,25 @@ pub struct Settings {
 }
 
 pub async fn draw_menu() -> Settings {
+    let text: ColoredString = "
+    ▐ ▄ ▪  ▄▄▄▄▄▄▄▄         ▄▄ • ▄▄▄ . ▐ ▄ 
+    •█▌▐███ •██  ▀▄ █·▪     ▐█ ▀ ▪▀▄.▀·•█▌▐█
+    ▐█▐▐▌▐█· ▐█.▪▐▀▀▄  ▄█▀▄ ▄█ ▀█▄▐▀▀▪▄▐█▐▐▌
+    ██▐█▌▐█▌ ▐█▌·▐█•█▌▐█▌.▐▌▐█▄▪▐█▐█▄▄▌██▐█▌
+    ▀▀ █▪▀▀▀ ▀▀▀ .▀  ▀ ▀█▄▀▪·▀▀▀▀  ▀▀▀ ▀▀ █▪
+    "
+        .to_string()
+        .yellow();
+    
+    let warning: ColoredString = "
+    I do not take responsibility for any actions
+    made with this tool, thanks!
+    "
+        .to_string()
+        .red();
+
+    println!("{}\n{}", text, warning);
+
     if !Confirm::with_theme(&theme::ColorfulTheme::default()).with_prompt("Do you want to continue?").interact().unwrap() {
         std::process::exit(1);
     };

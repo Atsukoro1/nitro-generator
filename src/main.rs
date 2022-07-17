@@ -1,7 +1,6 @@
 use tokio;
 
 mod output;
-mod settings;
 mod proxy;
 mod code;
 mod menu;
@@ -13,7 +12,7 @@ async fn main() -> std::io::Result<()> {
     let mut generated: Option<u128> = Some(1);
 
     output::print_menu();
-    let config: settings::Settings = settings::conf_settings();
+    let config: menu::Settings = menu::draw_menu().await;
 
     while config.code_count >= generated.unwrap() { 
         // Fetch proxies when proxy list is empty
