@@ -44,3 +44,10 @@ cargo run main.rs
 [ ] TUI
 ... and more soon
 ```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Before you open a new issue, look at existing ones to determine if there aren't issues with same problem/idea as yours.
+Please make sure to update tests as appropriate.
+
+## License
+[GNU](https://choosealicense.com/licenses/mit/)
