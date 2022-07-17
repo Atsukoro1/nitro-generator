@@ -8,7 +8,6 @@ Fast and low overhead multithreaded nitro generator written in Rust 🚀.
   - Geonode
   - Proxyscrape
   - Local
-- Multithreaded
 
 ## 1.2. Table of contents
 - [1. Nitrogen](#1-nitrogen)
@@ -44,7 +43,6 @@ cargo run main.rs
 ```
 [ ] Multithreading
 [ ] Better start menu
-[ ] TUI
 ... and more soon
 ```
 
