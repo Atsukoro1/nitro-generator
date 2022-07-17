@@ -6,7 +6,6 @@ use chrono;
 pub enum MessageType {
     Success,
     Failure,
-    Info,
     Warning, 
 }
 
@@ -14,8 +13,6 @@ pub fn get_message_type(message_type: MessageType) -> ColoredString {
     match message_type {
         MessageType::Failure => String::from("[!]")
             .bright_red(),
-        MessageType::Info => String::from("[?]")
-            .bright_blue(),
         MessageType::Warning => String::from("[!]")
             .yellow(),
         MessageType::Success => String::from("[✔]")
