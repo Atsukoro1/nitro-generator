@@ -32,10 +32,15 @@ After building this tool with following command, binary/executable can be found 
 ```bash
 cargo build
 ```
+Alternatively, you can try running the program instead of building it with
+```bash
+cargo run main.rs
+```
 
 ## Todo
 ```
 [ ] Multithreading
 [ ] Better start menu
+[ ] TUI
 ... and more soon
 ```
